@@ -7,7 +7,7 @@ If ($bAdmin -eq $False) {
 }
 
 #region Functions
-    function Get-LatestDotnet{
+    function Get-LatestDotnetRuntime {
         $versionList = Invoke-RestMethod -Uri "https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/releases-index.json"
 
         $latestStableChannel = $versionList.'releases-index' | 
@@ -29,14 +29,14 @@ If ($bAdmin -eq $False) {
         }
 
         $latestRelease = $channelResponse.releases | 
-            Where-Object { $_.'sdk'.version -notmatch 'preview|rc' } |
-            Sort-Object { ConvertTo-SortableVersion $_.'sdk'.version } -Descending |
+            Where-Object { $_.'runtime'.version -notmatch 'preview|rc' } |
+            Sort-Object { ConvertTo-SortableVersion $_.'runtime'.version } -Descending |
             Select-Object -First 1
 
-        # Get the download URL for Windows x64
-        $downloadUrl = ($latestRelease.sdk.files | Where-Object {
-            $_.name -eq 'dotnet-sdk-win-x64.exe' -or 
-            $_.name -like 'dotnet-sdk-*-win-x64.exe'
+        # Get the download URL for Windows x64 runtime
+        $downloadUrl = ($latestRelease.runtime.files | Where-Object {
+            $_.name -eq 'dotnet-runtime-win-x64.exe' -or 
+            $_.name -like 'dotnet-runtime-*-win-x64.exe'
         }).url
 
         return $downloadUrl
