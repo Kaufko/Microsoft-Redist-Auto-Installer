@@ -7,43 +7,47 @@ If ($bAdmin -eq $False) {
 }
 
 #region Functions
-    function Get-LatestDotnetRuntime {
-        $versionList = Invoke-RestMethod -Uri "https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/releases-index.json"
+    function Get-LatestDotnet {
+    $response = Invoke-WebRequest -Uri "https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/releases-index.json"
+    $data = $response.Content | ConvertFrom-Json
+    $releasesIndex = $data.'releases-index'
 
-        $latestStableChannel = $versionList.'releases-index' | 
-            Where-Object { $_.'support-phase' -eq 'active' -and $_.'channel-version' -notlike '*-preview*' } |
-            Sort-Object { [version]$_.'channel-version' } -Descending |
-            Select-Object -First 1
-
-        $channelResponse = Invoke-RestMethod -Uri $latestStableChannel.'releases.json'
-
-        function ConvertTo-SortableVersion {
-            param($versionString)
-            $baseVersion = $versionString -replace '-.*$'
-            try {
-                [version]$baseVersion
-            }
-            catch {
-                [version]"0.0.0"
+    foreach ($releaseIndex in $releasesIndex) {
+        $latestRelease = $releaseIndex.'latest-release'
+        if ($latestRelease) {
+            $latestReleaseSplit = $latestRelease.Split('-')
+            if($latestReleaseSplit.Length -le 1)
+            {
+                $data = Invoke-WebRequest -Uri $releaseIndex.'releases.json'
+                
+                $versionReleases = $data.Content | ConvertFrom-Json
+                $versionFiles = $versionReleases.'releases'.'windowsdesktop'.'files'
+                $arch = $env:PROCESSOR_ARCHITECTURE
+                if ($arch -eq "AMD64") {
+                    $arch = 'win-x64'
+                } elseif ($arch -eq "ARM64") {
+                    $arch = 'arm-x64'
+                } elseif ($arch -eq "AMD86") {
+                    $arch = 'win-x86'
+                } else
+                {
+                    Write-Host "INVALID OS"
+                    return ''
+                }
+                foreach ($versionFile in $versionFiles)
+                {
+                    if($versionFile.'rid' -eq $arch)
+                    {
+                        return $versionFile.'url'
+                    }
+                }
+                break
             }
         }
-
-        $latestRelease = $channelResponse.releases | 
-            Where-Object { $_.'runtime'.version -notmatch 'preview|rc' } |
-            Sort-Object { ConvertTo-SortableVersion $_.'runtime'.version } -Descending |
-            Select-Object -First 1
-
-        # Get the download URL for Windows x64 runtime
-        $downloadUrl = ($latestRelease.runtime.files | Where-Object {
-            $_.name -eq 'dotnet-runtime-win-x64.exe' -or 
-            $_.name -like 'dotnet-runtime-*-win-x64.exe'
-        }).url
-
-        return $downloadUrl
     }
+}
+
 #endregion
-
-
 
 $ProgressPreference = 'SilentlyContinue' #turns off update bar (speeds up downloads by 90%)
 $downloadLocation = $env:TEMP
