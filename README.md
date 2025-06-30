@@ -7,3 +7,5 @@ DirectX
 ```Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass; 
 Invoke-Expression (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Kaufko/Microsoft-Redist-Auto-Installer/master/Redistrubutable%20installer.ps1").Content
 ```
+
+All download external links and files are only from Microsoft official servers.
