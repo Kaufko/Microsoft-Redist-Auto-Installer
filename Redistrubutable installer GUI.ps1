@@ -1,7 +1,6 @@
 
 
 $bAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
-$bAdmin = $True #Admin override, EDIT OUT BEFORE COMMIT
 If ($bAdmin -eq $False) {
     Write-Host "No administrator permissions! Relaunch as admin!"
     Start-Sleep -Seconds 5
