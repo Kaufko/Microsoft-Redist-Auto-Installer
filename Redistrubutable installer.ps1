@@ -80,15 +80,16 @@ function Install-VC86 {
     $vcRedistLog = "vc86.log"
     $process = Start-Process "$downloadLocation\vc_redist.x86.exe" -ArgumentList "/install", "/passive", "/norestart", "/log `"$downloadLocation\$vcRedistLog`"" -Wait -PassThru
     if ($process.ExitCode -eq 0) {
-        Write-Host "Installation succeeded."
+        Write-Host "Installation succeeded." -ForegroundColor Green
     } elseif ($process.ExitCode -eq 3010) {
-        Write-Host "Installation succeeded, but a reboot is required."
+        Write-Host "Installation succeeded, but a reboot is required." -ForegroundColor DarkYellow
     } else {
-        Write-Host "Installation failed with exit code $($process.ExitCode)."
+        Write-Host "Installation failed with exit code $($process.ExitCode)." -ForegroundColor Red
         Get-Content "$downloadLocation\$vcRedistLog"
     }
     Remove-Item "$downloadLocation\$vcRedistLog"
     Remove-Item -Path "$downloadLocation\vc_redist.x86.exe" -Force -ErrorAction SilentlyContinue
+    Write-Host ""
 }
 function Install-VC64 {
     Write-Output "Downloading VC++ x64"
@@ -98,15 +99,16 @@ function Install-VC64 {
     $vcRedistLog = "vc64.log"
     $process = Start-Process "$downloadLocation\vc_redist.x64.exe" -ArgumentList "/install", "/passive", "/norestart", "/log `"$downloadLocation\$vcRedistLog`"" -Wait -PassThru
     if ($process.ExitCode -eq 0) {
-        Write-Host "Installation succeeded."
+        Write-Host "Installation succeeded." -ForegroundColor Green
     } elseif ($process.ExitCode -eq 3010) {
-        Write-Host "Installation succeeded, but a reboot is required."
+        Write-Host "Installation succeeded, but a reboot is required." -ForegroundColor DarkYellow
     } else {
-        Write-Host "Installation failed with exit code $($process.ExitCode)."
-        Get-Content "$downloadLocation\$vcRedistLog"
+        Write-Host "Installation failed with exit code $($process.ExitCode)." -ForegroundColor Red
+        Get-Content "$downloadLocation\$vcRedistLog" 
     }
     Remove-Item "$downloadLocation\$vcRedistLog"
     Remove-Item -Path "$downloadLocation\vc_redist.x64.exe" -Force -ErrorAction SilentlyContinue
+    Write-Host ""
 }
 function Install-Dotnet {
     Write-Output "Getting latest stable .NET installer"
@@ -123,16 +125,17 @@ function Install-Dotnet {
     Write-Host "Installing Dotnet 9.0"
     $dotnetLog = "dotnet9.log"
     $process = Start-Process "$downloadLocation\dotnet9.exe" -ArgumentList "/install", "/passive", "/norestart", "/log `"$downloadLocation\$dotnetLog`"" -Wait -PassThru
-    if ($process.ExitCode -eq 0) {
-        Write-Host "Installation succeeded."
+    if ($process.ExitCode -eq 0) { 
+        Write-Host "Installation succeeded." -ForegroundColor Green
     } elseif ($process.ExitCode -eq 3010) {
-        Write-Host "Installation succeeded, but a reboot is required."
+        Write-Host "Installation succeeded, but a reboot is required." -ForegroundColor DarkYellow
     } else {
-        Write-Host "Installation failed with exit code $($process.ExitCode)."
+        Write-Host "Installation failed with exit code $($process.ExitCode)." -ForegroundColor Red
         Get-Content "$downloadLocation\$dotnetLog"
     }
     Remove-Item "$downloadLocation\$dotnetLog"
     Remove-Item -Path "$downloadLocation\dotnet9.exe" -Force -ErrorAction SilentlyContinue
+    Write-Host ""
 }
 function Install-DirectX {
     Write-Output "Downloading DirectX"
@@ -141,14 +144,15 @@ function Install-DirectX {
     $directXlog = "dxwebsetup.log"
     $process = Start-Process "$downloadLocation\dxwebsetup.exe" -ArgumentList "/Q" -Wait -PassThru
     if ($process.ExitCode -eq 0) {
-        Write-Host "Installation succeeded."
+        Write-Host "Installation succeeded." -ForegroundColor Green
     } elseif ($process.ExitCode -eq 3010) {
-        Write-Host "Installation succeeded, but a reboot is required."
+        Write-Host "Installation succeeded, but a reboot is required." -ForegroundColor DarkYellow
     } else {
-        Write-Host "Installation failed with exit code $($process.ExitCode)."
+        Write-Host "Installation failed with exit code $($process.ExitCode)." -ForegroundColor Red
     }
     Remove-Item "$downloadLocation\$directXlog" -ErrorAction SilentlyContinue
     Remove-Item -Path "$downloadLocation\dxwebsetup.exe" -Force -ErrorAction SilentlyContinue
+    Write-Host ""
 }
 
 if($args[0] -eq "/U")
