@@ -8,6 +8,5 @@ DirectX
 2. Run with administrator
 ### Arguments
 1. /U -> UI version with selectable installs
-```
-#### 
-All download external links and files are only from Microsoft official servers.
+
+##### All download external links and files are only from Microsoft official servers.
