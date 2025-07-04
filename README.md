@@ -9,4 +9,4 @@ DirectX
 ### Arguments
 1. /U -> UI version with selectable installs
 
-##### All download external links and files are only from Microsoft official servers.
+##### All external links and files are only from Microsoft official servers.
