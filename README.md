@@ -4,10 +4,10 @@ Automatically gets the latest stable DotNet version (as of 30.06.2025 that is 9.
 DirectX 
 ## Usage
 ### Script requires administrator permissions!
-#### Download script
-#### Run with administrator
+1. Download script
+2. Run with administrator
 ### Arguments
-#### /U -> UI version with selectable installs
+1. /U -> UI version with selectable installs
 ```
 #### 
 All download external links and files are only from Microsoft official servers.
