@@ -1,13 +1,7 @@
-
-
-$bAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
-If ($bAdmin -eq $False) {
-    Write-Host "No administrator permissions! Relaunch as admin!"
-    Start-Sleep -Seconds 5
-    Exit
+if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+    Start-Process powershell "-ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs
+    exit
 }
-
-
 
 #region Functions
     function Start-Installation {
