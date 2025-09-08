@@ -4,7 +4,7 @@ Automatically gets the latest stable DotNet version (as of 30.06.2025 that is 9.
 DirectX 
 ## Usage
 ```powershell 
-irm https://raw.githubusercontent.com/Kaufko/Microsoft-Redist-Auto-Installer/refs/heads/master/installer.ps1 | iex
+irm "https://raw.githubusercontent.com/Kaufko/Microsoft-Redist-Auto-Installer/refs/heads/master/installer.ps1" | iex
 ```
 
 ### For Headless mode use /H
