@@ -3,8 +3,10 @@ if ($MyInvocation.MyCommand.Path) {
     $CurrentScript = $MyInvocation.MyCommand.Path
 } else {
     $CurrentScript = "$env:TEMP\installer_memory.ps1"
-    $ScriptContent = (Get-Content $PSCommandPath -Raw 2>$null) 
-    if (-not $ScriptContent) {
+    try{
+        $ScriptContent = (Get-Content $PSCommandPath -Raw 2>$null) 
+    }
+    catch {
         Write-Host "Saving script from memory to $CurrentScript"
         $ScriptContent = $MyInvocation.MyCommand.Definition
         Set-Content -Path $CurrentScript -Value $ScriptContent -Force
