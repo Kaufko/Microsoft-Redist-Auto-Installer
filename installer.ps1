@@ -1,7 +1,10 @@
 if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    Start-Process powershell "-ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs
+    $argString = $args -join ' '
+    Start-Process powershell -ArgumentList "-ExecutionPolicy Bypass -File `"$PSCommandPath`" $argString" -Verb RunAs
     exit
 }
+
+
 
 #region Functions
     function Start-Installation {
@@ -149,8 +152,17 @@ function Install-DirectX {
     Write-Host ""
 }
 
-if($args[0] -eq "/U")
+if($args[0] -eq "/H")
 {
+    # Headless installation
+    Install-VC86
+    Install-VC64
+    Install-DirectX
+    Install-Dotnet
+}
+else
+{
+    # GUI installation (default)
     Add-Type -AssemblyName System.Windows.Forms
 
     $form = New-Object System.Windows.Forms.Form
@@ -186,7 +198,6 @@ if($args[0] -eq "/U")
     $startButton.Add_Click({ Start-Installation })
     $startButton.Size = New-Object System.Drawing.Size(120,20)
 
-
     $flowPanel.Controls.Add($vc86toggle)
     $flowPanel.Controls.Add($vc64toggle)
     $flowPanel.Controls.Add($directXtoggle)
@@ -195,14 +206,7 @@ if($args[0] -eq "/U")
 
     $form.Controls.Add($flowPanel)
 
-
     $form.Add_Shown({$form.Activate()})
     [void]$form.ShowDialog()
 }
-else
-{
-    Install-VC86
-    Install-VC64
-    Install-DirectX
-    Install-Dotnet
-}
+
