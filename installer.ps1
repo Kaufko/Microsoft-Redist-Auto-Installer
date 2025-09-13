@@ -18,7 +18,6 @@ $TempScript = "$env:TEMP\installer_temp.ps1"
 if ($CurrentScript -ne $TempScript) {
     Copy-Item -Path $CurrentScript -Destination $TempScript -Force
 
-    # Preserve arguments
     $argString = $args -join ' '
 
     # Elevate if not admin
@@ -134,7 +133,6 @@ function Install-DirectX {
 #region Main Execution
 
 if ($args.Count -ge 1 -and $args[0].ToUpper() -eq "/H") {
-    # Headless
     Install-VC86
     Install-VC64
     Install-DirectX
